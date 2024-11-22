@@ -1,0 +1,15 @@
+streamlit
+langchain
+huggingface-hub
+openai
+requests
+python-dotenv
+sentencepiece  # Para modelos de Hugging Face
+fastapi
+uvicorn
+pillow  # Manipulación de imágenes
+chromadb  # Para almacenamiento vectorial
+arxiv  # Para buscar papers científicos
+networkx  # Para grafos
+pandas  # Para procesar datos financieros
+matplotlib  # Para gráficas
