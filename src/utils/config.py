@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from typing import Any, Dict
 import logging
 
+
 class Config:
     """Configuration manager for the application."""
     
@@ -19,7 +20,7 @@ class Config:
         
         # Application settings
         self.app_name = self._get_env("APP_NAME", "Digital Content Generator")
-        self.environment = self._get_env("ENVIRONMENT", "development")
+        self.environment = self._get_env("ENVIRONMENT", "development").lower()
         self.debug = self._get_env("DEBUG", "True").lower() == "true"
         self.port = int(self._get_env("PORT", "8501"))
         
@@ -27,7 +28,8 @@ class Config:
         self.secret_key = self._get_env("SECRET_KEY", required=True)
         self.allowed_hosts = self._get_env("ALLOWED_HOSTS", "localhost").split(",")
         
-        # LLM settings
+        # LLM (Language Model) settings
+        self.openai_api_key = self._get_env("OPENAI_API_KEY", required=True)
         self.groq_api_key = self._get_env("GROQ_API_KEY")
         self.ollama_host = self._get_env("OLLAMA_HOST", "http://localhost:11434")
         
@@ -124,6 +126,7 @@ class Config:
         # Add validation logic here
         required_keys = [
             "secret_key",
+            "openai_api_key",
             "groq_api_key" if self.environment == "production" else None,
         ]
         
@@ -136,6 +139,7 @@ class Config:
             raise ValueError(f"Missing required configuration keys: {missing_keys}")
         
         return True
+
 
 # Usage example
 if __name__ == "__main__":

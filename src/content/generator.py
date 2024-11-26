@@ -5,6 +5,8 @@ from src.content.templates import get_template
 from src.translation.translator import Translator
 from src.monitoring.langsmith_tracker import LangSmithTracker
 from src.utils.config import Config
+from src.content.validators import ContentValidator
+
 
 class ContentGenerator:
     """Generador principal de contenido."""
@@ -27,18 +29,18 @@ class ContentGenerator:
     ) -> Dict[str, Any]:
         """Genera contenido para una plataforma específica."""
         
-        # Obtener el template adecuado
-        template = get_template(platform)
-        
-        # Crear el prompt
-        prompt = self._create_prompt(
-            template,
-            topic,
-            audience,
-            company_info
-        )
-        
         try:
+            # Obtener el template adecuado
+            template = get_template(platform)
+            
+            # Crear el prompt
+            prompt = self._create_prompt(
+                template,
+                topic,
+                audience,
+                company_info
+            )
+            
             # Generar el contenido base
             with self.tracker.track_generation(platform, topic):
                 content = self.llm_selector.generate_content(prompt, model_name)
@@ -59,6 +61,17 @@ class ContentGenerator:
                 content=content,
                 image=image
             )
+        
+            # Validar el contenido generado
+            validator = ContentValidator(self.config)
+            validation_report = validator.validate_content(
+                content=formatted_content["text"],
+                template=template.__dict__,
+                image_metadata={"style": template.image_style} if template.requires_image else None
+            )
+            
+            if not validation_report["overall_valid"]:
+                raise ValueError(f"Contenido inválido: {validation_report}")
             
             return {
                 "content": formatted_content,
@@ -66,7 +79,7 @@ class ContentGenerator:
                 "platform": platform,
                 "language": language
             }
-            
+                
         except Exception as e:
             raise Exception(f"Error en la generación de contenido: {str(e)}")
     
