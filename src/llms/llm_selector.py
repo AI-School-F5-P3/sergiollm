@@ -18,25 +18,17 @@ class LLMSelector:
     
     def _initialize_models(self):
         """Inicializa los modelos disponibles."""
+        # Solo mantenemos el modelo Ollama
         self.models = {
-            "local": self._setup_ollama(),
-            "groq": self._setup_groq()
+            "local": self._setup_ollama()  # Sólo mantenemos Ollama
         }
     
     def _setup_ollama(self):
         """Configura el modelo local de Ollama."""
         return Ollama(
             base_url=self.config.ollama_host,
-            model="llama2",
+            model="llama2",  # Puedes cambiar a otro modelo si lo prefieres
             temperature=0.7
-        )
-    
-    def _setup_groq(self):
-        """Configura el modelo de Groq."""
-        return ChatGroq(
-            api_key=self.config.groq_api_key,
-            temperature=0.7,
-            model_name="mixtral-8x7b-32768"
         )
     
     def get_model(self, model_name: str = "local"):
@@ -50,10 +42,8 @@ class LLMSelector:
         model = self.get_model(model_name)
         
         try:
-            if model_name == "groq":
-                response = model.invoke([HumanMessage(content=prompt)])
-                return response.content
-            else:
-                return model.invoke(prompt)
+            # Solo utilizamos Ollama para generar el contenido
+            response = model.invoke(prompt)
+            return response
         except Exception as e:
             raise Exception(f"Error generando contenido: {str(e)}")
