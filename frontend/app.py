@@ -1,20 +1,28 @@
 import streamlit as st
-from src.main import generate_content
+from streamlit_option_menu import option_menu
+from pages import home, content_generator, analytics
 
-# Título de la app
-st.title("Generador de Contenido Automático")
+st.set_page_config(
+    page_title="Digital Content Generator",
+    page_icon="🖋️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# Entrada del usuario
-platform = st.selectbox("Plataforma", ["LinkedIn", "Twitter", "Blog"])
-topic = st.text_input("Tema", placeholder="Introduce el tema del contenido")
+# Sidebar for navigation
+with st.sidebar:
+    selected = option_menu(
+        "Navigation",
+        ["Home", "Content Generator", "Analytics"],
+        icons=["house", "edit", "bar-chart"],
+        menu_icon="cast",
+        default_index=0,
+    )
 
-# Botón para generar contenido
-if st.button("Generar"):
-    if topic:
-        st.write("Generando contenido...")
-        prompt = f"Escribe un post para {platform} sobre {topic}."
-        content = generate_content(prompt)
-        st.subheader("Contenido generado:")
-        st.write(content)
-    else:
-        st.warning("Por favor, introduce un tema.")
+# Navigation logic
+if selected == "Home":
+    home.render()
+elif selected == "Content Generator":
+    content_generator.render()
+elif selected == "Analytics":
+    analytics.render()

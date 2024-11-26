@@ -1,7 +1,13 @@
 from typing import Dict, Any
 from langchain.llms import Ollama
-from langchain.chat_models import ChatGroq
+from langchain_community.chat_models import ChatGroq
 from langchain.schema import HumanMessage
+import sys
+from pathlib import Path
+
+# Añadir el directorio raíz del proyecto al PATH
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+
 from src.utils.config import Config
 
 class LLMSelector:
