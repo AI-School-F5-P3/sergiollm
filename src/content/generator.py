@@ -42,8 +42,8 @@ class ContentGenerator:
             )
             
             # Generar el contenido base
-            with self.tracker.track_generation(platform, topic):
-                content = self.llm_selector.generate_content(prompt, model_name)
+            content = self.llm_selector.generate_content(prompt, model_name)
+
             
             # Traducir si es necesario
             if language != "es":

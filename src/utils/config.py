@@ -29,8 +29,8 @@ class Config:
         self.allowed_hosts = self._get_env("ALLOWED_HOSTS", "localhost").split(",")
         
         # LLM (Language Model) settings
+        self.llm_provider = self._get_env("LLM_PROVIDER", "ollama").lower()  # Nuevo: Proveedor de LLM
         self.openai_api_key = self._get_env("OPENAI_API_KEY", required=True)
-        self.groq_api_key = self._get_env("GROQ_API_KEY")
         self.ollama_host = self._get_env("OLLAMA_HOST", "http://localhost:11434")
         
         # Image generation
@@ -126,8 +126,8 @@ class Config:
         # Add validation logic here
         required_keys = [
             "secret_key",
-            "openai_api_key",
-            "groq_api_key" if self.environment == "production" else None,
+            "openai_api_key" if self.llm_provider == "openai" else None,
+            "ollama_host" if self.llm_provider == "ollama" else None,
         ]
         
         missing_keys = [

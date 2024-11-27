@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from langchain.llms import Ollama
-from langchain.llms import OpenAI  # Importamos la clase de OpenAI
+from langchain.chat_models import ChatOpenAI  # Ajuste: usar ChatOpenAI para modelos de OpenAI
 from langchain.schema import HumanMessage
 import sys
 from pathlib import Path
@@ -31,20 +31,20 @@ class LLMSelector:
         elif self.config.llm_provider == "openai":
             return self._setup_openai()
         else:
-            raise ValueError("Proveedor de LLM no soportado: {}".format(self.config.llm_provider))
+            raise ValueError(f"Proveedor de LLM no soportado: {self.config.llm_provider}")
     
     def _setup_ollama(self):
         """Configura el modelo local de Ollama."""
         return Ollama(
             base_url=self.config.ollama_host,
-            model="llama2",  # Puedes cambiar a otro modelo si lo prefieres
+            model="llama3.2",  # Puedes cambiar a otro modelo si lo prefieres
             temperature=0.7
         )
     
     def _setup_openai(self):
         """Configura el modelo de OpenAI mediante su API."""
-        return OpenAI(
-            api_key=self.config.openai_api_key,  # Usamos la API Key de OpenAI desde el config
+        return ChatOpenAI(  # Ajuste: Usar ChatOpenAI de LangChain
+            openai_api_key=self.config.openai_api_key,  # Usamos la API Key de OpenAI desde el config
             model="gpt-4",  # Puedes elegir entre gpt-3.5, gpt-4, etc.
             temperature=0.7
         )
@@ -62,9 +62,10 @@ class LLMSelector:
         try:
             # Generar el contenido dependiendo del modelo seleccionado
             if isinstance(model, Ollama):
-                response = model.invoke(prompt)
-            elif isinstance(model, OpenAI):
-                response = model.invoke([HumanMessage(content=prompt)])
+                response = model.invoke(prompt)  # Ollama utiliza directamente `invoke` con el prompt
+            elif isinstance(model, ChatOpenAI):
+                response = model([HumanMessage(content=prompt)])  # OpenAI espera una lista de mensajes
+                return response[0].content  # Extraemos el contenido de la respuesta
             else:
                 raise ValueError("Modelo no soportado para generación de contenido")
             

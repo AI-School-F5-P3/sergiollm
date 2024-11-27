@@ -23,7 +23,7 @@ def render():
     
     # Inputs del usuario
     topic = st.text_input("Tema del contenido:", "")
-    platform = st.selectbox("Plataforma objetivo:", ["Blog", "Instagram", "Twitter", "LinkedIn"])
+    platform = st.selectbox("Plataforma objetivo:", ["Blog", "Instagram", "Twitter", "LinkedIn", "Facebook"])
     language = st.selectbox("Idioma:", ["es", "en", "fr", "de"])
     audience = st.text_input("Audiencia objetivo:", "audiencia general")
     

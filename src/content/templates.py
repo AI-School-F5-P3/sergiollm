@@ -84,6 +84,25 @@ class Templates:
             - Fomenta la interacción con preguntas o encuestas
             """
         )
+    @staticmethod
+    def blog() -> ContentTemplate:
+        return ContentTemplate(
+            platform="Blog",
+            tone="profesional y educativo",
+            max_length=5000,
+            style="artículo informativo",
+            requires_image=True,
+            image_style="imagen profesional relacionada con el tema",
+            additional_instructions="""
+            - Estructura el contenido en introducción, desarrollo y conclusión
+            - Usa subtítulos para organizar las secciones principales
+            - Incluye ejemplos o casos prácticos cuando sea relevante
+            - Mantén un tono educativo pero accesible
+            - Termina con un llamado a la acción o reflexión final
+            - Optimiza para SEO usando palabras clave naturalmente
+            - Incluye una meta descripción de 150-160 caracteres
+            """
+        )
 
 def get_template(platform: str) -> ContentTemplate:
     """
@@ -102,7 +121,8 @@ def get_template(platform: str) -> ContentTemplate:
         "instagram": Templates.instagram,
         "linkedin": Templates.linkedin,
         "twitter": Templates.twitter,
-        "facebook": Templates.facebook
+        "facebook": Templates.facebook,
+        "blog": Templates.blog
     }
     
     template_func = templates.get(platform.lower())
