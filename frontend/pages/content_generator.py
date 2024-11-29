@@ -7,6 +7,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 
 from src.content.generator import ContentGenerator
 from src.utils.config import Config  # Importar la clase Config
+from src.image.generator import ImageGenerator
 
 def render():
     st.title("Generador de Contenido")
@@ -45,9 +46,15 @@ def render():
                 st.subheader("Resultado:")
                 st.write(result["content"]["text"])
                 
-                # Mostrar imagen generada, si aplica
-                if result.get("image_url"):
-                    st.image(result["image_url"], caption="Imagen generada")
+                # Generar imagen usando Hugging Face
+                image_generator = ImageGenerator(config=config)
+                image_path = image_generator.generate(prompt=topic)
+                
+                # Mostrar la imagen generada
+                if image_path:
+                    st.image(image_path, caption="Imagen generada")
+                else:
+                    st.warning("No se pudo generar la imagen.")
             
             except Exception as e:
                 st.error(f"Error al generar contenido: {str(e)}")

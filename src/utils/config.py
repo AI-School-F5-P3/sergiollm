@@ -34,7 +34,7 @@ class Config:
         self.ollama_host = self._get_env("OLLAMA_HOST", "http://localhost:11434")
         
         # Image generation
-        self.stable_diffusion_host = self._get_env("STABLE_DIFFUSION_HOST")
+        self.huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
         self.unsplash_api_key = self._get_env("UNSPLASH_API_KEY")
         
         # Database settings
