@@ -27,12 +27,15 @@ def render():
     platform = st.selectbox("Plataforma objetivo:", ["Blog", "Instagram", "Twitter", "LinkedIn", "Facebook"])
     language = st.selectbox("Idioma:", ["es", "en", "fr", "de"])
     audience = st.text_input("Audiencia objetivo:", "audiencia general")
+    # Selector de dispositivo (CPU/GPU)
+    device = st.radio("Selecciona el dispositivo para la generación de imágenes:", ("CPU", "GPU"))
     
     if st.button("Generar Contenido"):
         if topic:
             try:
                 # Inicializar generador de contenido
                 generator = ContentGenerator(config=config)  # Pasar el config a ContentGenerator
+                
                 
                 # Generar el contenido
                 result = generator.generate(
@@ -48,7 +51,7 @@ def render():
                 
                 # Generar imagen usando Hugging Face
                 image_generator = ImageGenerator(config=config)
-                image_path = image_generator.generate(prompt=topic)
+                image_path = image_generator.generate(prompt=topic, device=device.lower())
                 
                 # Mostrar la imagen generada
                 if image_path:

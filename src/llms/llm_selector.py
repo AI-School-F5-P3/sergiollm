@@ -1,5 +1,6 @@
 from typing import Dict, Any
-from langchain.llms import Ollama
+#from langchain.llms import Ollama
+from langchain_community.llms import Ollama
 from langchain.chat_models import ChatOpenAI  # Ajuste: usar ChatOpenAI para modelos de OpenAI
 from langchain.schema import HumanMessage
 import sys
