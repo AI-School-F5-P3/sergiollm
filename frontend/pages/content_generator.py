@@ -1,6 +1,8 @@
 import streamlit as st
 import sys
 from pathlib import Path
+from PIL import Image
+
 
 # Añadir el directorio raíz del proyecto al PATH
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
@@ -8,6 +10,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from src.content.generator import ContentGenerator
 from src.utils.config import Config  # Importar la clase Config
 from src.image.generator import ImageGenerator
+
 
 def render():
     st.title("Generador de Contenido")
@@ -28,7 +31,6 @@ def render():
     language = st.selectbox("Idioma:", ["es", "en", "fr", "de"])
     audience = st.text_input("Audiencia objetivo:", "audiencia general")
     # Selector de dispositivo (CPU/GPU)
-    device = st.radio("Selecciona el dispositivo para la generación de imágenes:", ("CPU", "GPU"))
     
     if st.button("Generar Contenido"):
         if topic:
@@ -51,11 +53,13 @@ def render():
                 
                 # Generar imagen usando Hugging Face
                 image_generator = ImageGenerator(config=config)
-                image_path = image_generator.generate(prompt=topic, device=device.lower())
-                
+                image_path = image_generator.generate(prompt=topic)
+
                 # Mostrar la imagen generada
                 if image_path:
-                    st.image(image_path, caption="Imagen generada")
+                    # Abrir la imagen usando PIL y mostrarla con Streamlit
+                    image = Image.open(image_path)
+                    st.image(image, caption="Imagen generada")
                 else:
                     st.warning("No se pudo generar la imagen.")
             

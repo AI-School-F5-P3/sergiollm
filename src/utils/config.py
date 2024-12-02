@@ -49,8 +49,8 @@ class Config:
         self.news_api_key = self._get_env("NEWS_API_KEY")
         
         # Monitoring
-        self.langsmith_api_key = self._get_env("LANGSMITH_API_KEY")
-        self.langchain_project = self._get_env("LANGCHAIN_PROJECT")
+        #self.langsmith_api_key = self._get_env("LANGSMITH_API_KEY")
+        #self.langchain_project = self._get_env("LANGCHAIN_PROJECT")
         
         # Paths
         self.data_dir = Path(self._get_env("DATA_DIR", "./data"))
